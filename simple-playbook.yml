@@ -4,9 +4,14 @@
     - name: install wget
       yum: name=wget state=present
 
-    - name:download epel - httpd24.repo
+    - name: download epel - httpd24.repo
       command: wget https://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo -P /etc/yum.repos.d
 
     - name: install httpd24
       yum: name=httpd24 state=present
 
+    - name: yum epel-release
+      yum: name=epel-release state=present
+
+    - name: install remi
+      yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
