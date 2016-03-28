@@ -1,6 +1,12 @@
 - hosts: test-server
   become: yes
   tasks:
-    - name: install httpd
-      yum: name=httpd state=present
+    - name: install wget
+      yum: name=wget state=present
+
+    - name:download epel - httpd24.repo
+      command: wget https://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo -P /etc/yum.repos.d
+
+    - name: install httpd24
+      yum: name=httpd24 state=present
 
