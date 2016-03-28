@@ -10,8 +10,11 @@
     - name: install httpd24
       yum: name=httpd24 state=present
 
-    - name: yum epel-release
+    - name: install epel-release
       yum: name=epel-release state=present
 
     - name: install remi
       yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
+
+    - name: install php56
+      yum: name=php56 state=present
