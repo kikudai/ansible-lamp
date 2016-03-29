@@ -18,3 +18,25 @@
 
     - name: install php56
       yum: name=php56 state=present
+
+    - name: install mysql-community-release-el6-5.noarch.rpm
+      yum: name=http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm state=present
+
+    - name: install epel for mysql
+      yum: name=http://dl.iuscommunity.org/pub/ius/stable/Redhat/6/x86_64/ius-release-1.0-14.ius.el6.noarch.rpm state=present
+
+    - name: install epel for mysql
+      yum: name=http://dl.iuscommunity.org/pub/ius/stable/Redhat/6/x86_64/epel-release-6-5.noarch.rpm state=present
+
+#    - name: remove mysql
+#      yum: name=mysql-libs state=absent
+
+    - name: install mysql55-server
+      yum: name=mysql55-server state=present
+
+    - name: install 
+      yum: name=ftp://195.220.108.108/linux/remi/enterprise/6/remi/x86_64/php56-mysqlnd-qc-panel-1.2.0-6.el6.remi.noarch.rpm state=present
+
+    - name: install php56u-mysqlnd
+      yum: name=php56u-mysqlnd state=present
+
