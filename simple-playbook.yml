@@ -28,8 +28,14 @@
     - name: install epel for mysql
       yum: name=http://dl.iuscommunity.org/pub/ius/stable/Redhat/6/x86_64/epel-release-6-5.noarch.rpm state=present
 
-#    - name: remove mysql
-#      yum: name=mysql-libs state=absent
+    - name: is mysql55-server already installed
+      shell: rpm -qa | grep mysql55-server
+      register: already_mysql
+      failed_when: already_mysql not in [0, 1]
+
+    - name: remove mysql 
+      yum: name=mysql state=absent
+      when: already_mysql.rc == 1
 
     - name: install mysql55-server
       yum: name=mysql55-server state=present
