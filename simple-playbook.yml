@@ -22,7 +22,7 @@
       failed_when: already_mysql not in [0, 1]
 
     - name: remove mysql 
-      yum: name=mysql state=absent
+      yum: name=mysql-libs state=absent
       when: already_mysql.rc == 1
 
     - name: install mysql-community-release-el6-5.noarch.rpm
