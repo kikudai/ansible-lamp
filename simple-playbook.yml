@@ -19,9 +19,9 @@
     - name: is mysql55-server already installed
       shell: rpm -qa | grep mysql55-server
       register: already_mysql
-      failed_when: already_mysql not in [0, 1]
+      failed_when: already_mysql.rc not in [0, 1]
 
-    - name: remove mysql 
+    - name: remove mysql-libs
       yum: name=mysql-libs state=absent
       when: already_mysql.rc == 1
 
