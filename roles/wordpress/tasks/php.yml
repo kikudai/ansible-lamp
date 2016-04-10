@@ -1,0 +1,7 @@
+---
+- name: install remi
+  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
+
+- name: install php56
+  yum: name=php56 state=present
+

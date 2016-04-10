@@ -1,0 +1,4 @@
+---
+- name: install php56u-mysqlnd
+  yum: name=php56u-mysqlnd state=present
+

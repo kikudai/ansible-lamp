@@ -1,0 +1,12 @@
+---
+- name: check epel-httpd24.repo
+  stat: path=/etc/yum.repos.d/epel-httpd24.repo
+  register: is_file
+
+- name: download epel - httpd24.repo
+  command: wget https://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo -P /etc/yum.repos.d
+  when: not is_file.stat.exists
+
+- name: install httpd24
+  yum: name=httpd24 state=present
+ 
