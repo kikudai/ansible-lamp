@@ -1,5 +1,5 @@
 - hosts: test-server
   become: yes
   roles: 
-    - wordpress
+    - lamp
 
