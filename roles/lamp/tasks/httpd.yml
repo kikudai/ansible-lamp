@@ -16,7 +16,7 @@
     - user
 
 - name: usermod -a -G www vagrant
-  user: name=vagrant groups=www
+  user: name=vagrant groups=www append=yes
   tags: 
     - user
 
