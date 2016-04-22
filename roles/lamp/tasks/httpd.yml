@@ -10,17 +10,17 @@
 - name: install httpd24
   yum: name=httpd24 state=present
 
+- name: start httpd
+  service: name=httpd state=started enabled=yes
+
 - name: groupadd www
   group: name=www state=present
-  tags: 
-    - user
 
 - name: usermod -a -G www vagrant
   user: name=vagrant groups=www append=yes
-  tags: 
-    - user
 
 - name: ln -s /var/www /opt/rh/httpd24/root/var/www
-  file: path=/var/www src=/opt/rh/httpd24/root/var/www state=link
-  tags:
-    - user 
+  file: path=/var/www src=/opt/rh/httpd24/root/var/www state=link group=www
+
+- name: chown -R root:www /opt/rh/httpd24/root/var/www
+  file: path=/opt/rh/httpd24/root/var/www group=www mode=2775
