@@ -22,15 +22,30 @@
 - name: ln -s /var/www /opt/rh/httpd24/root/var/www
   file: path=/var/www src=/opt/rh/httpd24/root/var/www state=link group=www
 
-- name: chown -R root:www /opt/rh/httpd24/root/var/www
-  file: path=/opt/rh/httpd24/root/var/www group=www mode=2775
-
-- name: get dir permission list
-  shell: find /opt/rh/httpd24/root/var/www -type d | xargs ls -ld | awk '{print $1;}'
-  register: dir_permission_list
+- name: get www dir list
+  command: find /opt/rh/httpd24/root/var/www -type d
+  register: list_dir_www
   changed_when: false
   always_run: yes
+  tags:
+    - test
 
-- name: find /var/www -type d -exec sudo chmod 2775 {} \;
-  shell: find /opt/rh/httpd24/root/var/www -type d -exec sudo chmod 2775 {} \;
-  when: dir_permission_list.stdout_lines.count("d") > dir_permission_list.stdout_lines.count("drwxrwsr-x")
+- name: chown -R root:www /opt/rh/httpd24/root/var/www
+  file: path="{{item}}" group=www mode=2775
+  with_items: list_dir_www['stdout_lines']
+  tags:
+    - test
+
+- name: get www file list
+  command: find /opt/rh/httpd24/root/var/www -type f
+  register: list_file_www
+  changed_when: false
+  always_run: yes
+  tags:
+    - test
+
+- name: chmod 0664 -R /opt/rh/httpd24/root/var/www
+  file: path='{{item}}' group=www mode=0664
+  with_items: list_file_www.stdout_lines
+  tags:
+    - test
