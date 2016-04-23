@@ -11,7 +11,7 @@
   yum: name=httpd24 state=present
 
 - name: start httpd
-  service: name=httpd state=started enabled=yes
+  service: name=httpd24-httpd state=started enabled=yes
 
 - name: groupadd www
   group: name=www state=present
@@ -27,25 +27,17 @@
   register: list_dir_www
   changed_when: false
   always_run: yes
-  tags:
-    - test
 
 - name: chown -R root:www /opt/rh/httpd24/root/var/www
-  file: path="{{item}}" group=www mode=2775
-  with_items: list_dir_www['stdout_lines']
-  tags:
-    - test
+  file: path="{{ item }}" group=www mode=2775
+  with_items: "{{ list_dir_www['stdout_lines'] }}"
 
 - name: get www file list
   command: find /opt/rh/httpd24/root/var/www -type f
   register: list_file_www
   changed_when: false
   always_run: yes
-  tags:
-    - test
 
 - name: chmod 0664 -R /opt/rh/httpd24/root/var/www
-  file: path='{{item}}' group=www mode=0664
-  with_items: list_file_www.stdout_lines
-  tags:
-    - test
+  file: path="{{ item }}" group=www mode=0664
+  with_items: "{{ list_file_www['stdout_lines'] }}"
