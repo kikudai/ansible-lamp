@@ -3,6 +3,8 @@
   shell: rpm -qa | grep mysql55-server
   register: already_mysql
   failed_when: already_mysql.rc not in [0, 1]
+  changed_when: false
+  always_run: yes
 
 - name: remove mysql-libs
   yum: name=mysql-libs state=absent
