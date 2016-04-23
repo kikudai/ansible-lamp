@@ -24,3 +24,13 @@
 
 - name: chown -R root:www /opt/rh/httpd24/root/var/www
   file: path=/opt/rh/httpd24/root/var/www group=www mode=2775
+
+- name: get dir permission list
+  shell: find /opt/rh/httpd24/root/var/www -type d | xargs ls -ld | awk '{print $1;}'
+  register: dir_permission_list
+  changed_when: false
+  always_run: yes
+
+- name: find /var/www -type d -exec sudo chmod 2775 {} \;
+  shell: find /opt/rh/httpd24/root/var/www -type d -exec sudo chmod 2775 {} \;
+  when: dir_permission_list.stdout_lines.count("d") > dir_permission_list.stdout_lines.count("drwxrwsr-x")
