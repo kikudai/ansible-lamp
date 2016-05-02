@@ -22,6 +22,9 @@
 - name: ln -s /var/www /opt/rh/httpd24/root/var/www
   file: path=/var/www src=/opt/rh/httpd24/root/var/www state=link group=www
 
+- name: ln -s /opt/rh/httpd24/root/etc/httpd /etc/httpd
+  file: path=/etc/httpd src=/opt/rh/httpd24/root/etc/httpd state=link
+
 - name: get www dir list
   command: find /opt/rh/httpd24/root/var/www -type d
   register: list_dir_www
