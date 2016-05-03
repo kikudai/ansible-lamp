@@ -1,7 +1,17 @@
 ---
 
 - name: yum install php-fpm
-  yum: name=php-fpm state=present
+  yum: name=php-fpm state=present enablerepo=remi-php56
+  tags:
+    - test
+
+- name: yum install php-pdo
+  yum: name=php-pdo state=present enablerepo=remi-php56
+  tags:
+    - test
+
+- name: yum install php-mysqlnd
+  yum: name=php-mysqlnd state=present enablerepo=remi-php56
   tags:
     - test
 
