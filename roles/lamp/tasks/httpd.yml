@@ -52,9 +52,4 @@
     backrefs=yes
     regexp='^#ServerName.+\:80'
     line='ServerName 192.168.33.12:80'
-  tags:
-    - test
-
-- name: cp templates/httpd/php.conf /etc/httpd/conf.d/php.conf
-  copy: src="templates/httpd/php.conf" dest="/etc/httpd/conf.d/php.conf"
 
