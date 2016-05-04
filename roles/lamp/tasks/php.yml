@@ -3,9 +3,12 @@
 - name: install remi
   yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
 
-- name: yum install php-fpm
+- name: yum install php-fpm php-pdo php-mysqlnd
   yum: name={{ item }} state=present enablerepo=remi-php56
   with_items:
     - php-fpm
     - php-pdo
     - php-mysqlnd
+
+- name: sudo service php-fpm start
+  service: name=php-fpm state=started enabled=yes
