@@ -52,4 +52,6 @@
     backrefs=yes
     regexp='^#ServerName.+\:80'
     line='ServerName 192.168.33.12:80'
+  notify:
+    - restert httpd24-httpd
 

@@ -16,7 +16,5 @@
 - name: cp templates/httpd/php.conf /etc/httpd/conf.d/php.conf
   copy: src="templates/httpd/php.conf" dest="/etc/httpd/conf.d/php.conf"
   notify:
-    - restert httpd
-  tags:
-    - test
+    - restert httpd24-httpd
 
