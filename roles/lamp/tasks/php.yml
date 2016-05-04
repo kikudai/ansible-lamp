@@ -1,23 +1,11 @@
 ---
 
+- name: install remi
+  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
+
 - name: yum install php-fpm
-  yum: name=php-fpm state=present enablerepo=remi-php56
-  tags:
-    - test
-
-- name: yum install php-pdo
-  yum: name=php-pdo state=present enablerepo=remi-php56
-  tags:
-    - test
-
-- name: yum install php-mysqlnd
-  yum: name=php-mysqlnd state=present enablerepo=remi-php56
-  tags:
-    - test
-
-#- name: install remi
-#  yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
-
-#- name: install php56
-#  yum: name=php56 state=present
-
+  yum: name={{ item }} state=present enablerepo=remi-php56
+  with_items:
+    - php-fpm
+    - php-pdo
+    - php-mysqlnd

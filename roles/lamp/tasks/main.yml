@@ -2,4 +2,3 @@
 - include: httpd.yml
 - include: php.yml
 - include: mysql.yml
-- include: mysqlnd.yml
