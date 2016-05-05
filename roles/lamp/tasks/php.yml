@@ -4,11 +4,24 @@
   yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
 
 - name: yum install php-fpm php-pdo php-mysqlnd
-  yum: name={{ item }} state=present enablerepo=remi-php56
+  yum: name={{ item }} state=present enablerepo=remi,remi-php56
   with_items:
     - php-fpm
     - php-pdo
     - php-mysqlnd
+    - php-opcache
+    - php-devel
+    - php-mbstring
+    - php-mcrypt
+    - php-mysql
+    - php-phpunit-PHPUnit
+    - php-pecl-xdebug
+    - php-cli
+    - php-common
+    - gd-last
+    - php-gd
+    - ImageMagick-last
+    - phpMyAdmin
 
 - name: sudo service php-fpm start
   service: name=php-fpm state=started enabled=yes

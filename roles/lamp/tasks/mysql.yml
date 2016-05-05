@@ -19,4 +19,5 @@
 - name: install mysql55-server
   yum: name=mysql55-server state=present
 
-
+- name: service mysqld start
+  service: name=mysqld state=started enabled=yes 
