@@ -7,8 +7,8 @@
   command: wget https://repos.fedorapeople.org/repos/jkaluza/httpd24/epel-httpd24.repo -P /etc/yum.repos.d
   when: not is_file.stat.exists
 
-- name: install httpd24
-  yum: name=httpd24 state=present
+- name: install httpd24u
+  yum: name=httpd24u state=present
 
 - name: start httpd
   service: name=httpd24-httpd state=started enabled=yes
