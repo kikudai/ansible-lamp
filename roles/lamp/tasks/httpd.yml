@@ -14,39 +14,33 @@
 - name: usermod -a -G www vagrant
   user: name=vagrant groups=www append=yes
 
-- name: ln -s /var/www /opt/rh/httpd24/root/var/www
-  file: path=/var/www src=/opt/rh/httpd24/root/var/www state=link group=www
-
-- name: ln -s /opt/rh/httpd24/root/etc/httpd /etc/httpd
-  file: path=/etc/httpd src=/opt/rh/httpd24/root/etc/httpd state=link
-
 - name: get www dir list
-  command: find /opt/rh/httpd24/root/var/www -type d
+  command: find /var/www -type d
   register: list_dir_www
   changed_when: false
   always_run: yes
 
-- name: chown -R root:www /opt/rh/httpd24/root/var/www
+- name: chown -R root:www /var/www
   file: path="{{ item }}" group=www mode=2775
   with_items: "{{ list_dir_www['stdout_lines'] }}"
 
 - name: get www file list
-  command: find /opt/rh/httpd24/root/var/www -type f
+  command: find /var/www -type f
   register: list_file_www
   changed_when: false
   always_run: yes
 
-- name: chmod 0664 -R /opt/rh/httpd24/root/var/www
+- name: chmod 0664 -R /var/www
   file: path="{{ item }}" group=www mode=0664
   with_items: "{{ list_file_www['stdout_lines'] }}"
 
-- name: vi httpd.conf
-  lineinfile: >
-    dest=/etc/httpd/conf/httpd.conf
-    state=present
-    backrefs=yes
-    regexp='^#ServerName.+\:80'
-    line='ServerName 192.168.33.12:80'
-  notify:
-    - restert httpd
+#- name: vi httpd.conf
+#  lineinfile: >
+#    dest=/etc/httpd/conf/httpd.conf
+#    state=present
+#    backrefs=yes
+#    regexp='^#ServerName.+\:80'
+#    line='ServerName 192.168.33.12:80'
+#  notify:
+#    - restert httpd
 
