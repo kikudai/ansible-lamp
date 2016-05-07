@@ -32,17 +32,22 @@
     - restert httpd
 
 - name: check phpMyAdmin.conf
-  command: grep "Require ip 192.168.33.1" /etc/httpd/conf.d/phpMyAdmin.conf
+  command: grep "# Apache 2.2" /etc/httpd/conf.d/phpMyAdmin.conf
   register: grep
   failed_when: grep.rc not in [0, 1]
   changed_when: false
   always_run: yes
+  tags:
+    - test
 
-- name: vi phpMyAdmin.conf
-  lineinfile: >
-    dest=/etc/httpd/conf.d/phpMyAdmin.conf
-    state=present
-    regexp=".*Require local.*" line="     Require local\n     Require ip 192.168.33.1"
+- name: cp phpMyAdmin.conf
+  copy: >
+    src="templates/httpd/phpMyAdmin.conf"
+    dest="/etc/httpd/conf.d/phpMyAdmin.conf"
+    force=yes
+    backup=yes
   notify:
     - restart httpd
   when: grep.rc == 1
+  tags:
+    - test
