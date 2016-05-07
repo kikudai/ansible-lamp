@@ -34,13 +34,13 @@
   file: path="{{ item }}" group=www mode=0664
   with_items: "{{ list_file_www['stdout_lines'] }}"
 
-#- name: vi httpd.conf
-#  lineinfile: >
-#    dest=/etc/httpd/conf/httpd.conf
-#    state=present
-#    backrefs=yes
-#    regexp='^#ServerName.+\:80'
-#    line='ServerName 192.168.33.12:80'
-#  notify:
-#    - restert httpd
+- name: vi httpd.conf
+  lineinfile: >
+    dest=/etc/httpd/conf/httpd.conf
+    state=present
+    backrefs=yes
+    regexp='^#ServerName.+\:80'
+    line='ServerName 192.168.33.12:80'
+  notify:
+    - restert httpd
 
