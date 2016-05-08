@@ -26,10 +26,10 @@
 - name: sudo service php-fpm start
   service: name=php-fpm state=started enabled=yes
 
-- name: cp templates/httpd/php.conf /etc/httpd/conf.d/php.conf
-  copy: src="templates/httpd/php.conf" dest="/etc/httpd/conf.d/php.conf"
+- name: cp httpd/php.conf /etc/httpd/conf.d/php.conf
+  copy: src="httpd/php.conf" dest="/etc/httpd/conf.d/php.conf"
   notify:
-    - restert httpd
+    - restart httpd
 
 - name: grep "# Apache 2.2" /etc/httpd/conf.d/phpMyAdmin.conf
   command: grep "# Apache 2.2" /etc/httpd/conf.d/phpMyAdmin.conf
@@ -38,9 +38,9 @@
   changed_when: false
   always_run: yes
 
-- name: cp templates/httpd/phpMyAdmin.conf /etc/httpd/conf.d/phpMyAdmin.conf
+- name: cp httpd/phpMyAdmin.conf /etc/httpd/conf.d/phpMyAdmin.conf
   copy: >
-    src="templates/httpd/phpMyAdmin.conf"
+    src="httpd/phpMyAdmin.conf"
     dest="/etc/httpd/conf.d/phpMyAdmin.conf"
     force=yes
     backup=yes

@@ -41,9 +41,9 @@
   changed_when: false
   always_run: yes
 
-- name: cp templates/httpd/httpd.conf /etc/httpd/conf/httpd.conf
+- name: cp httpd/httpd.conf /etc/httpd/conf/httpd.conf
   copy: >
-    src="templates/httpd/httpd.conf"
+    src="httpd/httpd.conf"
     dest="/etc/httpd/conf/httpd.conf"
     force=yes
     backup=yes
