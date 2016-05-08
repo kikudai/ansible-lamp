@@ -1,9 +1,9 @@
 ---
 
-- name: install remi
+- name: sudo yum install remi
   yum: name=http://rpms.famillecollet.com/enterprise/remi-release-6.rpm state=present
 
-- name: yum install php-fpm php-pdo php-mysqlnd
+- name: sudo yum install php-fpm php-pdo php-mysqlnd ...
   yum: name={{ item }} state=present enablerepo=remi,remi-php56
   with_items:
     - php-fpm
@@ -31,14 +31,14 @@
   notify:
     - restert httpd
 
-- name: check phpMyAdmin.conf
+- name: grep "# Apache 2.2" /etc/httpd/conf.d/phpMyAdmin.conf
   command: grep "# Apache 2.2" /etc/httpd/conf.d/phpMyAdmin.conf
-  register: grep
-  failed_when: grep.rc not in [0, 1]
+  register: grep_phpMyAdmin_conf
+  failed_when: grep_phpMyAdmin_conf.rc not in [0, 1]
   changed_when: false
   always_run: yes
 
-- name: cp phpMyAdmin.conf
+- name: cp templates/httpd/phpMyAdmin.conf /etc/httpd/conf.d/phpMyAdmin.conf
   copy: >
     src="templates/httpd/phpMyAdmin.conf"
     dest="/etc/httpd/conf.d/phpMyAdmin.conf"
@@ -46,4 +46,4 @@
     backup=yes
   notify:
     - restart httpd
-  when: grep.rc == 0
+  when: grep_phpMyAdmin_conf.rc == 0

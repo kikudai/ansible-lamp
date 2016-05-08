@@ -1,14 +1,14 @@
 ---
-- name: is mysql55-server already installed
+- name: rpm -qa | grep mysql55-server
   shell: rpm -qa | grep mysql55-server
-  register: already_mysql
-  failed_when: already_mysql.rc not in [0, 1]
+  register: grep_mysql55_server
+  failed_when: grep_mysql55_server.rc not in [0, 1]
   changed_when: false
   always_run: yes
 
 - name: remove mysql-libs
   yum: name=mysql-libs state=absent
-  when: already_mysql.rc == 1
+  when: grep_mysql55_server.rc == 1
 
 - name: install mysql-community-release-el6-5.noarch.rpm
   yum: name=http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm state=present

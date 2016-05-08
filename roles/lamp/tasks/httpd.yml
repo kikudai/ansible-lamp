@@ -1,17 +1,17 @@
 ---
-- name: yum install http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-14.ius.centos6.noarch.rpm
+- name: sudo um install http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-14.ius.centos6.noarch.rpm
   yum: name=http://dl.iuscommunity.org/pub/ius/stable/CentOS/6/x86_64/ius-release-1.0-14.ius.centos6.noarch.rpm state=present
 
-- name: yum install httpd24u
+- name: sudo yum install httpd24u
   yum: name=httpd24u state=present
 
-- name: start httpd
+- name: sudo service httpd start
   service: name=httpd state=started enabled=yes
 
-- name: groupadd www
+- name: sudo groupadd www
   group: name=www state=present
 
-- name: usermod -a -G www vagrant
+- name: sudo usermod -a -G www vagrant
   user: name=vagrant groups=www append=yes
 
 - name: get www dir list
@@ -20,7 +20,7 @@
   changed_when: false
   always_run: yes
 
-- name: chown -R root:www /var/www
+- name: sudo chown -R root:www /var/www
   file: path="{{ item }}" group=www mode=2775
   with_items: "{{ list_dir_www['stdout_lines'] }}"
 
@@ -34,13 +34,19 @@
   file: path="{{ item }}" group=www mode=0664
   with_items: "{{ list_file_www['stdout_lines'] }}"
 
-- name: vi httpd.conf
-  lineinfile: >
-    dest=/etc/httpd/conf/httpd.conf
-    state=present
-    backrefs=yes
-    regexp='^#ServerName.+\:80'
-    line='ServerName 192.168.33.12:80'
-  notify:
-    - restert httpd
+- name: grep "index.php" /etc/httpd/conf/httpd.conf
+  command: grep "index.php" /etc/httpd/conf/httpd.conf
+  register: grep_httpd_conf
+  failed_when: grep_httpd_conf.rc not in [0, 1]
+  changed_when: false
+  always_run: yes
 
+- name: cp templates/httpd/httpd.conf /etc/httpd/conf/httpd.conf
+  copy: >
+    src="templates/httpd/httpd.conf"
+    dest="/etc/httpd/conf/httpd.conf"
+    force=yes
+    backup=yes
+  notify:
+    - restart httpd
+  when: grep_httpd_conf.rc == 1
