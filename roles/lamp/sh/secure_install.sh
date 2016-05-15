@@ -12,7 +12,7 @@ init_file=/tmp/mysql-init
 
 /bin/cat <<EOF > ${init_file}
 -- Set the root password
-UPDATE mysql.user SET Password=PASSWORD('${mysql_root_password}') where user='root';
+UPDATE mysql.user SET Password=PASSWORD('$1') where user='root';
 FLUSH PRIVILEGES;
 -- Remove anonymous users
 DELETE FROM mysql.user WHERE User = 'root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');

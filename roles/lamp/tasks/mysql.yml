@@ -20,4 +20,48 @@
   yum: name=mysql55-server state=present
 
 - name: service mysqld start
-  service: name=mysqld state=started enabled=yes 
+  service: name=mysqld state=started enabled=yes
+
+- name: check file mysql
+  stat: path=/etc/my.conf.d/login.cnf
+  register: is_mysql_login_conf
+  changed_when: false
+  always_run: yes
+  tags:
+    - test
+
+- name: Create root user password
+  shell: cat /dev/urandom | LC_CTYPE=C tr -dc '[:alnum:]' | head -c 16
+  register: mysql_root_password
+  when: not is_mysql_login_conf.stat.exists
+  tags:
+    - test
+
+- name: Execute mysql_secure_installation
+  script: roles/lamp/sh/secure_install.sh {{ mysql_root_password.stdout | quote }}
+  register: mysql_secure_installation
+  when: not is_mysql_login_conf.stat.exists
+  tags:
+    - test
+
+- name: Add Line for include append config
+  lineinfile: >
+    dest=/etc/my.cnf
+    line="!includedir /etc/my.cnf.d"
+    backup=yes
+  when: not is_mysql_login_conf.stat.exists
+  tags:
+    - test
+
+- name: cp my.cnf /etc/my.cnf.d/login.cnf
+  template: >
+    src=my.cnf.j2
+    dest=/etc/my.cnf.d/login.cnf
+    owner=root
+    group=root
+    mode=0600
+  notify:
+    - restart mysqld
+  when: not is_mysql_login_conf.stat.exists
+  tags:
+    - test
