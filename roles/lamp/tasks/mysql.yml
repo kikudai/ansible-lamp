@@ -53,6 +53,14 @@
   tags:
     - test
 
+- name: mkdir my.cnf.d
+  file: >
+    path=/etc/my.conf.d
+    state=directory
+    owner=root
+    group=root
+    mode=0755
+
 - name: cp my.cnf /etc/my.cnf.d/login.cnf
   template: >
     src=my.cnf.j2
