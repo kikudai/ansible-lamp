@@ -5,25 +5,37 @@
   failed_when: grep_mysql55_server.rc not in [0, 1]
   changed_when: false
   always_run: yes
+  tags:
+    - test
 
 - name: remove mysql-libs
   yum: name=mysql-libs state=absent
   when: grep_mysql55_server.rc == 1
+  tags:
+    - test
 
 - name: install mysql-community-release-el6-5.noarch.rpm
   yum: name=http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm state=present
+  tags:
+    - test
 
 - name: install epel for mysql
   yum: name=http://dl.iuscommunity.org/pub/ius/stable/Redhat/6/x86_64/ius-release-1.0-14.ius.el6.noarch.rpm state=present
+  tags:
+    - test
 
 - name: install mysql55-server
   yum: name=mysql55-server state=present
+  tags:
+    - test
 
 - name: service mysqld start
   service: name=mysqld state=started enabled=yes
+  tags:
+    - test
 
 - name: check file mysql
-  stat: path=/etc/my.conf.d/login.cnf
+  stat: path=/etc/my.cnf.d/login.cnf
   register: is_mysql_login_conf
   changed_when: false
   always_run: yes
@@ -44,6 +56,16 @@
   tags:
     - test
 
+- name: mkdir my.cnf.d
+  file: >
+    path=/etc/my.cnf.d
+    state=directory
+    owner=root
+    group=root
+    mode=0755
+  tags:
+    - test
+
 - name: Add Line for include append config
   lineinfile: >
     dest=/etc/my.cnf
@@ -52,14 +74,6 @@
   when: not is_mysql_login_conf.stat.exists
   tags:
     - test
-
-- name: mkdir my.cnf.d
-  file: >
-    path=/etc/my.conf.d
-    state=directory
-    owner=root
-    group=root
-    mode=0755
 
 - name: cp my.cnf /etc/my.cnf.d/login.cnf
   template: >
